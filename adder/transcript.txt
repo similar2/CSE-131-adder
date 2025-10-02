@@ -1,0 +1,151 @@
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/num.snek
+5
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cargo run -- test/num.snek test/num.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s
+     Running `target/debug/adder test/num.snek test/num.s`
+5
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/num.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 5
+  ret
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ make test/num.run
+nasm -f elf64 test/num.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/num.run
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ ./test/num.run 
+5
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ 
+
+
+
+
+
+
+
+
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/add1.snek 
+(add1 9)
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cargo run -- test/add1.snek test/add1.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/adder test/add1.snek test/add1.s`
+10
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/add1.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 9
+add rax, 1
+  ret
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ make test/add1.run
+nasm -f elf64 test/add1.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/add1.run
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ ./test/add1.run 
+10
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ 
+
+
+
+
+
+
+
+
+
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/sub1.snek 
+(sub1 42)
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cargo run -- test/sub1.snek test/sub1.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/adder test/sub1.snek test/sub1.s`
+41
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/sub1.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 42
+sub rax, 1
+  ret
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ make test/sub1.run
+nasm -f elf64 test/sub1.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/sub1.run
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ ./test/sub1.run 
+41
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ 
+
+
+
+
+
+
+
+
+
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/neg.snek 
+(negate (sub1 (add1 3)))
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cargo run -- test/neg.snek test/neg.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/adder test/neg.snek test/neg.s`
+-3
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/neg.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 3
+add rax, 1
+sub rax, 1
+neg rax
+  ret
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ make test/neg.run
+nasm -f elf64 test/neg.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/neg.run
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ ./test/neg.run 
+-3
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/nest.snek 
+(add1 (sub1 (add1 (sub1 7))))
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cargo run -- test/nest.snek test/nest.s
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running `target/debug/adder test/nest.snek test/nest.s`
+7
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ cat test/nest.s
+
+section .text
+global our_code_starts_here
+our_code_starts_here:
+  mov rax, 7
+sub rax, 1
+add rax, 1
+sub rax, 1
+add rax, 1
+  ret
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ make test/nest.run
+nasm -f elf64 test/nest.s -o runtime/our_code.o
+ar rcs runtime/libour_code.a runtime/our_code.o
+rustc -L runtime/ runtime/start.rs -o test/nest.run
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ ./test/nest.run 
+7
+@similar2 ➜ /workspaces/CSE-131-adder/adder (main) $ 
+
+
+
